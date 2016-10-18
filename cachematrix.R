@@ -1,43 +1,49 @@
-## Put comments here that give an overall description of what your
-## functions do
+## The first function is basically an object that allows for storing of the matrix
+## if it has been solved already. It gets or sets similar to what you do in object
+## oriented programming. x stores the matrix to be solved, m stores the inverse.
 
-## Write a short comment describing this function
+## This function handles storing the matrix and its inverse
 
 makeCacheMatrix <- function(x = matrix()) {
+  m <- NULL
   
-  inv <- NULL
-  
-  set <- function(y)
-  {
-    x <<-y
-    inv <<-NULL
+  set <- function (y) {
+    x <<- y
+    m <<- NULL
   }
   
-  get <- function() x
+  get <-function() x
   
-  setInverse <- function(inverse) inv <<- inverse
+  setMtrx <- function(solve) m<<- solve
   
-  getInverse <- function() inv
+  getMtrx <- function() m
   
-  list(set=set,get=get,setInverse=setInverse,getInverse)
+  list (set=set, get=get, setMtrx=setMtrx, getMtrx=getMtrx)
 }
 
 
-## Write a short comment describing this function
+## This function solves the matrix by first checking to see if it is in cache.
+## If it is it returns the inverse from cache otherwise it calculates the inverse then
+## stores it in cache then returns the value.
+## A message is printed if retrieved from cache.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-  inv <- as.data.frame(x)$getInverse
   
-  if (!is.null(inv))
-  {
+  m <- x$getMtrx()
+  
+  if(!is.null(m)){
+    
     message("getting cached data")
-    return(inv)
+    #Return from cache
+    return(m)
+    
   }
+  data <- x$get()
   
-  data <- x
-
-  inv <- solve(data)
-  as.data.frame(x)$setInverse(inv)
-  inv
+  m <- solve(data,...)
+  
+  x$setMtrx(m)
+  
+  #Return not from cache
+  m
 }
